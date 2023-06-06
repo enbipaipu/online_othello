@@ -1,6 +1,5 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import { userColorRepository } from './userColorrepository';
-
 export type BoardArr = number[][];
 export type Pos = { x: number; y: number };
 
