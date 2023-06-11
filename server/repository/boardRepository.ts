@@ -27,7 +27,11 @@ const direction = [
 
 const changBoard = (y: number, x: number, s: number[], distance: number, turnColor: number) => {
   for (let i = distance; i >= 0; i -= 1) {
-    board[y + s[0] * i][x + s[1] * i] = turnColor;
+    if (board[y + s[0] * i][x + s[1] * i] !== turnColor) {
+      board[y + s[0] * i][x + s[1] * i] = turnColor;
+    } else {
+      break;
+    }
   }
 };
 
@@ -51,7 +55,8 @@ const boardTerms = (
   }
 };
 
-const boardFor = function (y: number, x: number, s: number[], ok: boolean, turnColor: number) {
+const boardFor = function (y: number, x: number, s: number[], turnColor: number) {
+  const ok = true;
   for (let distance = 1; distance < 8; distance += 1) {
     boardTerms(y, x, s, ok, distance, turnColor);
   }
@@ -60,8 +65,7 @@ const boardFor = function (y: number, x: number, s: number[], ok: boolean, turnC
 const makeBoard = (y: number, x: number, turnColor: number) => {
   if (board[y][x] === 0) {
     for (const s of direction) {
-      const ok = true;
-      boardFor(y, x, s, ok, turnColor);
+      boardFor(y, x, s, turnColor);
     }
     return board;
   }
