@@ -17,8 +17,8 @@ const Home = () => {
   };
 
   const [user] = useAtom(userAtom);
-  const [tasks, setTasks] = useState<TaskModel[] | undefined>(undefined);
-  const [label, setLabel] = useState('');
+  // const [tasks, setTasks] = useState<TaskModel[] | undefined>(undefined);
+  // const [label, setLabel] = useState('');
 
   const fetchBoard = async () => {
     const board = await apiClient.board.$get().catch(returnNull);
