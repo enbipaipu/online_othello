@@ -34,7 +34,9 @@ const changBoard = (y:number,x:number,s:number[],distance:number,turnColor:numbe
   }
 }
 
+
 const boardTerms = (y:number,x:number,s:number[],ok:boolean,distance:number,turnColor:number) =>{
+  
  if (board[y+s[0]*distance]===undefined || board[y+s[0]*distance][x+s[1]*distance]%3===0){
   ok=false
  }else if (board[y+s[0]*distance][x+s[1]*distance]===3-turnColor){
@@ -43,16 +45,18 @@ const boardTerms = (y:number,x:number,s:number[],ok:boolean,distance:number,turn
 changBoard(y,x,s,distance,turnColor);
 }}
 
+const boardFor = function(y:number,x:number,s:number[],ok:boolean,turnColor:number){
+  for (let distance = 1; distance < 8; distance += 1){
+boardTerms(y,x,s,ok,distance,turnColor)
+}
+}
+
 const makeBoard = (y: number, x: number,turnColor:number) => {
-  console.log('aaaaaaa')
   if (board[y][x]===0){
     for (const s of direction){
       const ok = true
-      for (let distance = 1; distance < 8; distance += 1) {
-        boardTerms(y,x,s,ok,distance,turnColor)
-      }
+      boardFor(y,x,s,ok,turnColor)
     }
-    console.log('aaaaaaaaaaaaaaa')
     return board
     
   }
@@ -64,6 +68,6 @@ export const boardRepository = {
     board[params.y][params.x] = userColorRepository.getUserColor(userId);
     makeBoard(params.y, params.x,userColorRepository.getUserColor(userId));
     return board;
-    
+
 },
 };
