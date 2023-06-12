@@ -9,21 +9,26 @@ import { userAtom } from '../../atoms/user';
 import styles from './othello.module.css';
 
 const Home = () => {
+  const [user] = useAtom(userAtom);
   const [board, setBoard] = useState<number[][]>();
 
-  const clickCell = async (x: number, y: number) => {
-    await apiClient.board.$post({ body: { x, y } });
-    await fetchBoard();
-  };
-
-  const [user] = useAtom(userAtom);
   // const [tasks, setTasks] = useState<TaskModel[] | undefined>(undefined);
   // const [label, setLabel] = useState('');
 
   const fetchBoard = async () => {
-    const board = await apiClient.board.$get().catch(returnNull);
+    const board = await apiClient.rooms.$get().catch(returnNull);
 
-    if (board !== null) setBoard(board.board);
+    if (board === null) {
+      const newRoom = await apiClient.rooms.$post();
+      setBoard(newRoom.board);
+    } else {
+      setBoard(board.board);
+    }
+  };
+
+  const clickCell = async (x: number, y: number) => {
+    await apiClient.rooms.board.$post({ body: { x, y } });
+    await fetchBoard();
   };
 
   useEffect(() => {

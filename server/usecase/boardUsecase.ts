@@ -1,5 +1,5 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import { userColorRepository } from './userColorrepository';
+import { userColorUsecase } from './userColorUsecase';
 
 export type BoardArr = number[][];
 export type Pos = { x: number; y: number };
@@ -64,15 +64,16 @@ const distanceBoard = function (y: number, x: number, around: number[], turnColo
 
 let turn = 1;
 
-export const boardRepository = {
+export const boardUsecase = {
   getBoard: (): BoardArr => board,
   clickBoard: (params: Pos, userId: UserId): BoardArr => {
-    if (turn === userColorRepository.getUserColor(userId)) {
+    if (turn === userColorUsecase.getUserColor(userId)) {
       if (board[params.y][params.x] === 0) {
         for (const around of aroundS) {
-          distanceBoard(params.y, params.x, around, userColorRepository.getUserColor(userId));
+          distanceBoard(params.y, params.x, around, userColorUsecase.getUserColor(userId));
         }
       }
+
       turn = 3 - turn;
     }
     return board;
