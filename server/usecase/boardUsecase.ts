@@ -63,7 +63,6 @@ const distanceBoard = function (y: number, x: number, around: number[], turnColo
 };
 
 let turn = 1;
-
 export const boardUsecase = {
   getBoard: (): BoardArr => board,
   clickBoard: (params: Pos, userId: UserId): BoardArr => {
