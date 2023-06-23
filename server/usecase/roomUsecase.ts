@@ -4,7 +4,7 @@ import { roomsRepository } from '$/repository/roomsRepository';
 import { roomIdParser } from '$/service/idParsers';
 import assert from 'assert';
 import { randomUUID } from 'crypto';
-import { userColorUsecase } from './userColorUsecase';
+import { boardUsecase } from './boardUsecase';
 
 const initBoard = () => [
   [0, 0, 0, 0, 0, 0, 0, 0],
@@ -34,8 +34,8 @@ export const roomUsecase = {
 
     assert(latest, 'クリック出来てるんだからRoomが無いわけない');
 
-    const newBoard: number[][] = JSON.parse(JSON.stringify(latest.board));
-    newBoard[y][x] = userColorUsecase.getUserColor(userId);
+    let newBoard: number[][] = JSON.parse(JSON.stringify(latest.board));
+    newBoard = boardUsecase.clickBoard(x, y, userId);
 
     const newRoom: RoomModel = { ...latest, board: newBoard };
 
