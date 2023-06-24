@@ -5,7 +5,7 @@ export type BoardArr = number[][];
 export type Pos = { x: number; y: number };
 
 const board: BoardArr = [
-  [0, 0, 0, 0, 0, 0, 0, 3],
+  [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 3, 0, 0, 0],
   [0, 0, 0, 1, 2, 3, 0, 0],
@@ -36,36 +36,67 @@ const changeZeroToThree = () => {
     }
   }
 };
+const checkBoardTerms2 = (
+  y: number,
+  x: number,
+  turnColor: number,
+  s: number[],
+  ok: boolean,
+  passThrough: boolean,
+  distance: number
+) => {
+  if (board[y + s[0] * distance][x + s[1] * distance] === turnColor) {
+    passThrough = true;
+  } else if (board[y + s[0] * distance][x + s[1] * distance] === 3 - turnColor) {
+    if (passThrough) {
+      board[y][x] = 3;
+    }
+  }
+};
+
+const checkBoardTerms = (
+  y: number,
+  x: number,
+  turnColor: number,
+  s: number[],
+  ok: boolean,
+  passThrough: boolean
+) => {
+  for (let distance = 1; distance < 8; distance++) {
+    if (
+      board[y + s[0] * distance] === undefined ||
+      board[y + s[0] * distance][x + s[1] * distance] === undefined ||
+      board[y + s[0] * distance][x + s[1] * distance] === 0
+    ) {
+      ok = false;
+    } else {
+      checkBoardTerms2(y, x, turnColor, s, ok, passThrough, distance);
+    }
+  }
+};
+
+const checkBoard = (y: number, x: number, turnColor: number) => {
+  for (const s of aroundS) {
+    const ok = true;
+    passThrough = false;
+    if (ok) {
+      checkBoardTerms(y, x, turnColor, s, ok, passThrough);
+    }
+  }
+};
 
 const makeCandidate = (turnColor: number) => {
   //前回のboardの候補地を削除
   changeZeroToThree();
 
   //次のboardの候補地を作成
-  // for (let y = 0; y < 8; y++) {
-  //   for (let x = 0; x < 8; x++) {
-  //     if (board[y][x] === 0) {
-  //       for (const s of aroundS) {
-  //         passThrough = false;
-  //         for (let distance = 1; distance < 8; distance++) {
-  //           if (
-  //             board[y + s[0] * distance] === undefined ||
-  //             board[y + s[0] * distance][x + s[1] * distance] === undefined ||
-  //             board[y + s[0] * distance][x + s[1] * distance] === 0
-  //           ) {
-  //             break;
-  //           } else if (board[y + s[0] * distance][x + s[1] * distance] === turnColor) {
-  //             passThrough = true;
-  //           } else if (board[y + s[0] * distance][x + s[1] * distance] === 3 - turnColor) {
-  //             if (passThrough) {
-  //               board[y][x] = 3;
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+  for (let y = 0; y < 8; y++) {
+    for (let x = 0; x < 8; x++) {
+      if (board[y][x] === 0) {
+        checkBoard(y, x, turnColor);
+      }
+    }
+  }
 };
 
 const boardTerms = function (
@@ -101,15 +132,14 @@ const distanceBoard = function (y: number, x: number, around: number[], turnColo
       }
     }
   }
-  makeCandidate(turnColor);
 };
 
-let turn = 1;
 export const boardUsecase = {
   getBoard: (): BoardArr => board,
   clickBoard: (x: number, y: number, userId: UserId): BoardArr => {
+    let turn = 1;
     if (turn === userColorUsecase.getUserColor(userId)) {
-      if (board[y][x] === 3) {
+      if (board[y][x] === 0) {
         console.log('bbbbbbbb');
         for (const around of aroundS) {
           distanceBoard(y, x, around, userColorUsecase.getUserColor(userId));
