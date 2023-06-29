@@ -25,8 +25,10 @@ const aroundS = [
   [0, -1],
   [-1, -1],
 ];
+console.table(board);
 
 let passThrough = false;
+let passStone = false;
 const changeZeroToThree = () => {
   for (let y = 0; y < 8; y++) {
     for (let x = 0; x < 8; x++) {
@@ -42,13 +44,13 @@ const checkBoardTerms2 = (
   turnColor: number,
   s: number[],
   ok: boolean,
-  passThrough: boolean,
+  passStone: boolean,
   distance: number
 ) => {
   if (board[y + s[0] * distance][x + s[1] * distance] === turnColor) {
-    passThrough = true;
+    passStone = true;
   } else if (board[y + s[0] * distance][x + s[1] * distance] === 3 - turnColor) {
-    if (passThrough) {
+    if (passStone) {
       board[y][x] = 3;
     }
   }
@@ -60,7 +62,7 @@ const checkBoardTerms = (
   turnColor: number,
   s: number[],
   ok: boolean,
-  passThrough: boolean
+  passStone: boolean
 ) => {
   for (let distance = 1; distance < 8; distance++) {
     if (
@@ -70,7 +72,7 @@ const checkBoardTerms = (
     ) {
       ok = false;
     } else {
-      checkBoardTerms2(y, x, turnColor, s, ok, passThrough, distance);
+      checkBoardTerms2(y, x, turnColor, s, ok, passStone, distance);
     }
   }
 };
@@ -78,9 +80,9 @@ const checkBoardTerms = (
 const checkBoard = (y: number, x: number, turnColor: number) => {
   for (const s of aroundS) {
     const ok = true;
-    passThrough = false;
+    passStone = false;
     if (ok) {
-      checkBoardTerms(y, x, turnColor, s, ok, passThrough);
+      checkBoardTerms(y, x, turnColor, s, ok, passStone);
     }
   }
 };
