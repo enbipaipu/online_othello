@@ -28,6 +28,8 @@ const aroundS = [
 console.table(board);
 
 let passThrough = false;
+let putStone = false;
+let turn = 1;
 // let passStone = false;
 // const changeZeroToThree = () => {
 //   for (let y = 0; y < 8; y++) {
@@ -112,6 +114,7 @@ const boardTerms = function (
     passThrough = true;
   } else if (board[y + around[0] * distance][x + around[1] * distance] === turnColor) {
     if (passThrough) {
+      putStone = true;
       for (let i = distance; i > -1; i--) {
         board[y + around[0] * i][x + around[1] * i] = turnColor;
       }
@@ -135,7 +138,7 @@ const distanceBoard = function (y: number, x: number, around: number[], turnColo
     }
   }
 };
-let turn = 1;
+
 export const boardUsecase = {
   getBoard: (): BoardArr => board,
   clickBoard: (x: number, y: number, userId: UserId): BoardArr => {
@@ -146,10 +149,11 @@ export const boardUsecase = {
         for (const around of aroundS) {
           distanceBoard(y, x, around, userColorUsecase.getUserColor(userId));
         }
+        if (putStone) {
+          turn = 3 - turn;
+        }
       }
       // makeCandidate(userColorUsecase.getUserColor(userId));
-
-      turn = 3 - turn;
     }
     return board;
   },
