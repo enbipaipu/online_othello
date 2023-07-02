@@ -44,6 +44,9 @@ const Home = () => {
     <>
       <BasicHeader user={user} />(
       <div className={styles.container}>
+        <button className={styles.button} onClick={() => reset()}>
+          リセット
+        </button>
         <div className={styles.board}>
           {board.map((row, y) =>
             row.map((color, x) => (
