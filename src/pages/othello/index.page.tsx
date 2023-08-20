@@ -1,8 +1,8 @@
 // import type { TaskModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
+import { boardUsecase } from 'server/usecase/boardUsecase.ts';
 import { Loading } from 'src/components/Loading/Loading';
-import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
 import { returnNull } from 'src/utils/returnNull';
 import { userAtom } from '../../atoms/user';
@@ -40,13 +40,18 @@ const Home = () => {
 
   if (!user || !board) return <Loading visible />;
 
+  const reset = async () => {
+    //await
+  };
+
+  const turnColor = boardUsecase.getTurn;
+
   return (
     <>
-      <BasicHeader user={user} />(
       <div className={styles.container}>
-        <button className={styles.button} onClick={() => reset()}>
+        {/* <button className={styles.button} onClick={() => reset()}>
           リセット
-        </button>
+        </button> */}
         <div className={styles.board}>
           {board.map((row, y) =>
             row.map((color, x) => (
@@ -65,22 +70,22 @@ const Home = () => {
             ))
           )}
         </div>
-        {/* <div className={styles['side-panel']}>
+        <div className={styles['side-panel']}>
           <div className={styles.turn}>
-            <h1>{turnColor === 1 ? '黒' : '白'}の番です</h1>
+            {/* <h1>{turnColor === 1 ? '黒' : '白'}の番です</h1>
+            <h1>{turnColor === userColorUsecase.getUserColor(userId) ? 'あなたの番です' : null}</h1> */}
           </div>
-          <div className={styles.score}>
+          {/* <div className={styles.score}>
             <h1>＜得点＞</h1>
             <h1>黒: {blackStones}</h1>
             <h1>白: {whiteStones}</h1>
           </div>
-          
+
           <button className={styles.button} onClick={resetBoard}>
             リセット
-          </button>
-                </div> */}
+          </button> */}
+        </div>
       </div>
-      );
     </>
   );
 };
