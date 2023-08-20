@@ -157,4 +157,7 @@ export const boardUsecase = {
     }
     return board;
   },
+  getTurn: () => {
+    return turn;
+  },
 };
