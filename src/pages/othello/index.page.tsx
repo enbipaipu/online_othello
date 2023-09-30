@@ -12,9 +12,6 @@ const Home = () => {
   const [user] = useAtom(userAtom);
   const [board, setBoard] = useState<number[][]>();
 
-  // const [tasks, setTasks] = useState<TaskModel[] | undefined>(undefined);
-  // const [label, setLabel] = useState('');
-
   const fetchBoard = async () => {
     const board = await apiClient.rooms.$get().catch(returnNull);
 
@@ -28,7 +25,6 @@ const Home = () => {
 
   const clickCell = async (x: number, y: number) => {
     await apiClient.rooms.board.$post({ body: { x, y } });
-    await fetchBoard();
   };
 
   useEffect(() => {
@@ -44,14 +40,11 @@ const Home = () => {
     //await
   };
 
-  const turnColor = boardUsecase.getTurn;
+  const turnColor = boardUsecase.getTurn();
 
   return (
     <>
       <div className={styles.container}>
-        {/* <button className={styles.button} onClick={() => reset()}>
-          リセット
-        </button> */}
         <div className={styles.board}>
           {board.map((row, y) =>
             row.map((color, x) => (
@@ -72,18 +65,18 @@ const Home = () => {
         </div>
         <div className={styles['side-panel']}>
           <div className={styles.turn}>
-            {/* <h1>{turnColor === 1 ? '黒' : '白'}の番です</h1>
-            <h1>{turnColor === userColorUsecase.getUserColor(userId) ? 'あなたの番です' : null}</h1> */}
+            <h1>{turnColor === 1 ? '黒' : '白'}の番です</h1>
+            <h1>{turnColor === userColorUsecase.getUserColor(userId) ? 'あなたの番です' : null}</h1>
           </div>
-          {/* <div className={styles.score}>
+          <div className={styles.score}>
             <h1>＜得点＞</h1>
             <h1>黒: {blackStones}</h1>
             <h1>白: {whiteStones}</h1>
           </div>
 
-          <button className={styles.button} onClick={resetBoard}>
+          <button className={styles.button} onClick={reset}>
             リセット
-          </button> */}
+          </button>
         </div>
       </div>
     </>
