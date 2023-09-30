@@ -31,3 +31,7 @@ model UserOnRoom {
 
   @@id([firebaseId, roomId])
 }
+
+model User {
+  id String @id
+}

@@ -7,10 +7,15 @@ import { apiClient } from 'src/utils/apiClient';
 import { returnNull } from 'src/utils/returnNull';
 import { userAtom } from '../../atoms/user';
 import styles from './othello.module.css';
+import { UserId } from '$/commonTypesWithClient/branded';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
   const [board, setBoard] = useState<number[][]>();
+
+  const fetchUser = async()=>{
+    const userId:UserId = 
+  }
 
   const fetchBoard = async () => {
     const board = await apiClient.rooms.$get().catch(returnNull);
